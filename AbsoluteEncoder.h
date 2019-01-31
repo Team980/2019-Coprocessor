@@ -5,7 +5,7 @@
 
 class AbsoluteEncoder {
   public:
-    AbsoluteEncoder(uint16_t DataPin, uint16_t ClockPin, uint16_t ChipSelectPin, uint16_t ProgramInputPin);
+    AbsoluteEncoder(uint16_t DataPin, uint16_t ClockPin, uint16_t ChipSelectPin);
     uint32_t getDegrees(int);  // get the absolute degree
     uint32_t getValue(int);   // get the raw data, 0-4095
     uint32_t readAll(void);   // reads raw data from encoders
@@ -13,7 +13,6 @@ class AbsoluteEncoder {
     const uint16_t _clock;  // clock pin: output from arduino to AS5145
     const uint16_t _cs;     // chip select: output
     const uint16_t _data;   // data pin: input
-    const uint16_t _pdio;   // program input pin: input    
 };
 
 #endif
