@@ -1,6 +1,8 @@
 #include "AbsoluteEncoder.h"
+#include "VisionSystem.h"
 
 AbsoluteEncoder encoders(3, 6, 7);
+VisionSystem visionSystem;
 
 void setup() {
   Serial.begin(9600);
@@ -8,6 +10,7 @@ void setup() {
 
 void loop() {
   encoders.readAll();
+  visionSystem.readBlocks();
 
   Serial.print("encoder 1: ");
   Serial.println(encoders.getDegrees(0));
