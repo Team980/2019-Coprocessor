@@ -1,25 +1,44 @@
-#include "AbsoluteEncoder.h"
-#include "VisionSystem.h"
+#include <Wire.h>
 
-AbsoluteEncoder encoders(3, 6, 7);
-VisionSystem visionSystem;
+//#include "AbsoluteEncoder.h"
+//#include "VisionSystem.h"
+
+//AbsoluteEncoder encoders(3, 6, 7);
+//VisionSystem visionSystem;
+
+int data;
 
 void setup() {
+  Wire.begin(10);
+  Wire.onRequest(onRequestData);
+  Wire.onReceive(onReceiveCommand);
+
+  data = 618;
+
   Serial.begin(9600);
 }
 
 void loop() {
-  encoders.readAll();
-  visionSystem.readBlocks();
-
-  Serial.print("encoder 1: ");
-  Serial.println(encoders.getDegrees(0));
-
-  Serial.print("encoder 2: ");
-  Serial.println(encoders.getDegrees(1));
-
-  Serial.print("encoder 3: ");
-  Serial.println(encoders.getDegrees(2));
+  //encoders.readAll();
+  //visionSystem.readBlocks();
 
   delay(20);
+}
+
+void onRequestData() {
+  byte buff[2];
+
+  buff[0] = data >> 8;
+  buff[1] = data;
+
+  Wire.write(buff, 2);
+}
+
+void onReceiveCommand(int numBytes) {
+  while (Wire.available()) {
+    byte command = Wire.read();
+    if (command != 0) {
+      Serial.println(command);
+    }
+  }
 }
