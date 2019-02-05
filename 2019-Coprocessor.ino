@@ -1,44 +1,43 @@
 #include <Wire.h>
 
 //#include "AbsoluteEncoder.h"
-//#include "VisionSystem.h"
+#include "VisionSystem.h"
 
 //AbsoluteEncoder encoders(3, 6, 7);
-//VisionSystem visionSystem;
-
-int data;
+VisionSystem visionSystem;
 
 void setup() {
   Wire.begin(10);
   Wire.onRequest(onRequestData);
   Wire.onReceive(onReceiveCommand);
 
-  data = 618;
-
-  Serial.begin(9600);
+  //Serial.begin(9600); //Serial console for debugging
 }
 
 void loop() {
   //encoders.readAll();
-  //visionSystem.readBlocks();
+  visionSystem.readBlocks();
 
   delay(20);
 }
 
 void onRequestData() {
-  byte buff[2];
+  byte buff[4];
+  
+  int distanceBetweenTargets = visionSystem.getDistanceBetweenTargets();
+  buff[0] = distanceBetweenTargets >> 8;
+  buff[1] = distanceBetweenTargets;
 
-  buff[0] = data >> 8;
-  buff[1] = data;
+  int targetCenterCoord = visionSystem.getTargetCenterCoord();
+  buff[2] = targetCenterCoord >> 8;
+  buff[3] = targetCenterCoord;
 
-  Wire.write(buff, 2);
+  Wire.write(buff, 4);
 }
 
 void onReceiveCommand(int numBytes) {
   while (Wire.available()) {
     byte command = Wire.read();
-    if (command != 0) {
-      Serial.println(command);
-    }
+    Serial.println(command);
   }
 }
