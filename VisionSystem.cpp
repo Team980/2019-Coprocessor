@@ -3,7 +3,7 @@
 
 #include <Pixy2.h>
 
-const int VISION_TARGET_SIGNATURE = 0;
+const int VISION_TARGET_SIGNATURE = 1;
 
 Pixy2 pixy;
 
@@ -20,22 +20,26 @@ void VisionSystem::readBlocks(void) {
 
   int numBlocks = pixy.ccc.getBlocks();
 
-  if (numBlocks > 2) {
-
+  if (numBlocks = 1) {
+    Block target = pixy.ccc.blocks[0];
+    
+    targetCenterCoord = target.m_x;
+    
+  } else if (numBlocks >= 2) {
     // WARNING: This does not check to make sure they are the correct signature!
     Block largestTarget = pixy.ccc.blocks[0];
     Block secondLargestTarget = pixy.ccc.blocks[1];
 
     if (VisionSystem::area(secondLargestTarget) > VisionSystem::area(largestTarget)) {
       // Swap the two blocks
-      Block _tmp = secondLargestTarget; 
+      Block _tmp = secondLargestTarget;
       secondLargestTarget = largestTarget;
       largestTarget = _tmp;
     }
 
     for (int i = 2; i < numBlocks; i++) {
       Block block = pixy.ccc.blocks[i];
-      
+
       if (block.m_signature == VISION_TARGET_SIGNATURE) {
         if (VisionSystem::area(block) > VisionSystem::area(largestTarget)) {
           secondLargestTarget = largestTarget;
