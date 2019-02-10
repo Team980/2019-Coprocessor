@@ -23,14 +23,14 @@ void loop() {
 
 void onRequestData() {
   byte buff[4];
-  
-  int distanceBetweenTargets = visionSystem.getDistanceBetweenTargets();
-  buff[0] = distanceBetweenTargets >> 8;
-  buff[1] = distanceBetweenTargets;
 
   int targetCenterCoord = visionSystem.getTargetCenterCoord();
-  buff[2] = targetCenterCoord >> 8;
-  buff[3] = targetCenterCoord;
+  buff[0] = targetCenterCoord >> 8;
+  buff[1] = targetCenterCoord;
+
+  int targetWidth = visionSystem.getTargetWidth();
+  buff[2] = targetWidth >> 8;
+  buff[3] = targetWidth;
 
   Wire.write(buff, 4);
 }

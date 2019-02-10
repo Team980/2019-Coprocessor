@@ -9,8 +9,8 @@ class VisionSystem {
   public:
     VisionSystem();
     void readBlocks(void);
-    int getDistanceBetweenTargets();
     int getTargetCenterCoord();
+    int getTargetWidth();
   private:
     int area(Block b);
 };
