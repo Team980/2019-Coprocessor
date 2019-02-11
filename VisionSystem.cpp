@@ -13,7 +13,7 @@ int targetWidth = -1;
 
 VisionSystem::VisionSystem() {
   frontCamera.init(8);
-  backCamera.init(10);
+  //backCamera.init(10);
   
   //pixy.setCameraBrightness(12);
 }
