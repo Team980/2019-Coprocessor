@@ -1,28 +1,23 @@
 #include "Arduino.h"
 #include "VisionSystem.h"
 
-#include <Pixy2SPI_SS.h>
+#include <Pixy2.h>
 
 const int VISION_TARGET_SIGNATURE = 1;
 
-Pixy2SPI_SS frontCamera;
-Pixy2SPI_SS backCamera;
+Pixy2 pixy;
 
 int targetCenterCoord = -1;
 int targetWidth = -1;
 
 VisionSystem::VisionSystem() {
-  frontCamera.init(8);
-  //backCamera.init(10);
-  
+  pixy.init();
   //pixy.setCameraBrightness(12);
 }
 
 void VisionSystem::readBlocks(void) {
-  targetCenterCoord = -1;
-  targetWidth = -1;
-
-  Pixy2SPI_SS pixy = frontCamera; //TODO controllable
+  //targetCenterCoord = -1;
+  //targetWidth = -1;
 
   int numBlocks = pixy.ccc.getBlocks();
 
