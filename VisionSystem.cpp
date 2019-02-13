@@ -21,7 +21,7 @@ void VisionSystem::readBlocks(void) {
 
   int numBlocks = pixy.ccc.getBlocks();
 
-  if (numBlocks = 1) {
+  if (numBlocks == 1) {
     Block target = pixy.ccc.blocks[0];
 
     targetCenterCoord = target.m_x;
