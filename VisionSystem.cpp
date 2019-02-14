@@ -54,7 +54,8 @@ void VisionSystem::readBlocks(void) {
     targetCenterCoord = (largestTarget.m_x + secondLargestTarget.m_x) / 2;
 
     // Add the two target widths, plus the distance between them - overapproximation
-    targetWidth = largestTarget.m_width + secondLargestTarget.m_width + abs(largestTarget.m_x - secondLargestTarget.m_x);
+    int coordDifference = largestTarget.m_x - secondLargestTarget.m_x;
+    targetWidth = largestTarget.m_width + secondLargestTarget.m_width + abs(coordDifference); //do not put math in the abs
   }
 }
 
