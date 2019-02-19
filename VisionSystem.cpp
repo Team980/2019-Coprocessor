@@ -5,7 +5,7 @@
 
 const int VISION_TARGET_SIGNATURE = 1;
 
-Pixy2 pixy;
+Pixy2 pixy; //front pixy
 
 int targetCenterCoord = -1;
 int targetWidth = -1;
