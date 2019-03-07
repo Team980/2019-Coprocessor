@@ -1,10 +1,10 @@
 #include <Wire.h>
 
 #include "AbsoluteEncoder.h"
-#include "VisionSystem.h"
+//#include "VisionSystem.h"
 
-AbsoluteEncoder encoders(3, 6, 7); //data, clock, chip select
-VisionSystem visionSystem;
+AbsoluteEncoder encoders(3, 4, 5); //data, clock, chip select
+//VisionSystem visionSystem;
 
 void setup() {
   Wire.begin(10);
@@ -16,9 +16,9 @@ void setup() {
 
 void loop() {
   encoders.readAll();
-  visionSystem.readBlocks();
+  //visionSystem.readBlocks();
 
-  delay(20);
+  //delay(20);
 }
 
 void onRequestData() {
@@ -42,11 +42,11 @@ void onRequestData() {
   buff[10] = wristAngle >> 8;
   buff[11] = wristAngle;
 
-  int targetCenterCoord = visionSystem.getTargetCenterCoord();
+  int targetCenterCoord = 4; //visionSystem.getTargetCenterCoord();
   buff[12] = targetCenterCoord >> 8;
   buff[13] = targetCenterCoord;
 
-  int targetWidth = visionSystem.getTargetWidth();
+  int targetWidth = 4; //visionSystem.getTargetWidth();
   buff[14] = targetWidth >> 8;
   buff[15] = targetWidth;
 
