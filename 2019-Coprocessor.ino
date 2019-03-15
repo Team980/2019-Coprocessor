@@ -24,23 +24,23 @@ void loop() {
 void onRequestData() {
   byte buff[16];
 
-  uint32_t shoulderAngle = encoders.getDegrees(0);
-  buff[0] = shoulderAngle >> 24;
-  buff[1] = shoulderAngle >> 16;
-  buff[2] = shoulderAngle >> 8;
-  buff[3] = shoulderAngle;
+  uint32_t shoulderValue = encoders.getValue(0);
+  buff[0] = shoulderValue >> 24;
+  buff[1] = shoulderValue >> 16;
+  buff[2] = shoulderValue >> 8;
+  buff[3] = shoulderValue;
 
-  uint32_t elbowAngle = encoders.getDegrees(1);
-  buff[4] = elbowAngle >> 24;
-  buff[5] = elbowAngle >> 16;
-  buff[6] = elbowAngle >> 8;
-  buff[7] = elbowAngle;
+  uint32_t elbowValue = encoders.getValue(1);
+  buff[4] = elbowValue >> 24;
+  buff[5] = elbowValue >> 16;
+  buff[6] = elbowValue >> 8;
+  buff[7] = elbowValue;
 
-  uint32_t wristAngle = encoders.getDegrees(2);
-  buff[8] = wristAngle >> 24;
-  buff[9] = wristAngle >> 16;
-  buff[10] = wristAngle >> 8;
-  buff[11] = wristAngle;
+  uint32_t wristValue = encoders.getValue(2);
+  buff[8] = wristValue >> 24;
+  buff[9] = wristValue >> 16;
+  buff[10] = wristValue >> 8;
+  buff[11] = wristValue;;
 
   int targetCenterCoord = 4; //visionSystem.getTargetCenterCoord();
   buff[12] = targetCenterCoord >> 8;

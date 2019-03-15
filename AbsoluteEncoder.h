@@ -6,7 +6,7 @@
 class AbsoluteEncoder {
   public:
     AbsoluteEncoder(uint16_t DataPin, uint16_t ClockPin, uint16_t ChipSelectPin);
-    uint32_t getDegrees(int);  // get the absolute degree
+    //float getDegrees(int);  // get the absolute degree
     uint32_t getValue(int);   // get the raw data, 0-4095
     uint32_t readAll(void);   // reads raw data from encoders
   private:

@@ -13,9 +13,9 @@ AbsoluteEncoder::AbsoluteEncoder(uint16_t DataPin, uint16_t ClockPin, uint16_t C
   digitalWrite(_clock, HIGH);
 }
 
-uint32_t AbsoluteEncoder::getDegrees(int id) {
-  return ((getValue(id) * 360) / 4096);
-}
+/*float AbsoluteEncoder::getDegrees(int id) {
+  return ((getValue(id) * 360) / 4096.0f);
+}*/
 
 uint32_t AbsoluteEncoder::getValue(int id) {
   return (rawValues[id] >> 6);
