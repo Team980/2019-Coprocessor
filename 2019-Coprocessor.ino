@@ -3,8 +3,19 @@
 #include "AbsoluteEncoder.h"
 //#include "VisionSystem.h"
 
+// Used to transfer floats over the data bus
+typedef union {
+    float f;
+    char bytes[4];
+} packedFloat;
+
 AbsoluteEncoder encoders(3, 4, 5); //data, clock, chip select
 //VisionSystem visionSystem;
+
+// Used to calculate average velocity of each joint
+float valueBuffer[3][2];
+float timeBuffer[2];
+float velocityBuffer[3];
 
 void setup() {
   Wire.begin(10);
@@ -15,7 +26,25 @@ void setup() {
 }
 
 void loop() {
+  timeBuffer[1] = timeBuffer[0];
+  timeBuffer[0] = millis() / 1000.0f;
+  
   encoders.readAll();
+
+  valueBuffer[0][1] = valueBuffer[0][0];
+  valueBuffer[0][0] = encoders.getValue(0) * (360 / 4096.0f);
+  velocityBuffer[0] = (valueBuffer[0][0] - valueBuffer[0][1]) / (timeBuffer[0] - timeBuffer[1]);
+
+  valueBuffer[1][1] = valueBuffer[1][0];
+  valueBuffer[1][0] = encoders.getValue(1) * (360 / 4096.0f);
+  velocityBuffer[1] = (valueBuffer[1][0] - valueBuffer[1][1]) / (timeBuffer[0] - timeBuffer[1]);
+
+  valueBuffer[2][1] = valueBuffer[2][0];
+  valueBuffer[2][0] = encoders.getValue(2) * (360 / 4096.0f);
+  velocityBuffer[2] = (valueBuffer[2][0] - valueBuffer[2][1]) / (timeBuffer[0] - timeBuffer[1]);
+
+  //Serial.println(timeBuffer[0] - timeBuffer[1]);
+  
   //visionSystem.readBlocks();
 
   //delay(20);
@@ -42,15 +71,30 @@ void onRequestData() {
   buff[10] = wristValue >> 8;
   buff[11] = wristValue;;
 
-  int targetCenterCoord = 4; //visionSystem.getTargetCenterCoord();
+  int targetCenterCoord = -980; //visionSystem.getTargetCenterCoord();
   buff[12] = targetCenterCoord >> 8;
   buff[13] = targetCenterCoord;
 
-  int targetWidth = 4; //visionSystem.getTargetWidth();
+  int targetWidth = -980; //visionSystem.getTargetWidth();
   buff[14] = targetWidth >> 8;
   buff[15] = targetWidth;
 
   Wire.write(buff, 16);
+
+  packedFloat packedShoulderVel;
+  packedShoulderVel.f = velocityBuffer[0];
+
+  Wire.write(packedShoulderVel.bytes, 4);
+
+  packedFloat packedElbowVel;
+  packedElbowVel.f = velocityBuffer[1];
+
+  Wire.write(packedElbowVel.bytes, 4);
+
+  packedFloat packedWristVel;
+  packedWristVel.f = velocityBuffer[2];
+
+  Wire.write(packedWristVel.bytes, 4);
 }
 
 void onReceiveCommand(int numBytes) {
