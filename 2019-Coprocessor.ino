@@ -1,7 +1,7 @@
 #include <Wire.h>
 
 #include "AbsoluteEncoder.h"
-//#include "VisionSystem.h"
+#include "VisionSystem.h"
 
 // Used to transfer floats over the data bus
 typedef union {
@@ -10,7 +10,7 @@ typedef union {
 } packedFloat;
 
 AbsoluteEncoder encoders(3, 4, 5); //data, clock, chip select
-//VisionSystem visionSystem;
+VisionSystem visionSystem;
 
 // Used to calculate average velocity of each joint
 float valueBuffer[3][2];
@@ -20,7 +20,7 @@ float velocityBuffer[3];
 void setup() {
   Wire.begin(10);
   Wire.onRequest(onRequestData);
-  Wire.onReceive(onReceiveCommand);
+  //Wire.onReceive(onReceiveCommand);
 
   //Serial.begin(9600); //Serial console for debugging
 }
@@ -45,7 +45,7 @@ void loop() {
 
   //Serial.println(timeBuffer[0] - timeBuffer[1]);
   
-  //visionSystem.readBlocks();
+  visionSystem.readBlocks();
 
   //delay(20);
 }
@@ -71,11 +71,11 @@ void onRequestData() {
   buff[10] = wristValue >> 8;
   buff[11] = wristValue;;
 
-  int targetCenterCoord = -980; //visionSystem.getTargetCenterCoord();
+  int targetCenterCoord = visionSystem.getTargetCenterCoord();
   buff[12] = targetCenterCoord >> 8;
   buff[13] = targetCenterCoord;
 
-  int targetWidth = -980; //visionSystem.getTargetWidth();
+  int targetWidth = visionSystem.getTargetWidth();
   buff[14] = targetWidth >> 8;
   buff[15] = targetWidth;
 
@@ -97,9 +97,9 @@ void onRequestData() {
   Wire.write(packedWristVel.bytes, 4);
 }
 
-void onReceiveCommand(int numBytes) {
+/*void onReceiveCommand(int numBytes) {
   while (Wire.available()) {
     byte command = Wire.read();
     //Serial.println(command);
   }
-}
+}*/
