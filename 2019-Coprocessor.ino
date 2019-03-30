@@ -2,6 +2,7 @@
 
 #include "AbsoluteEncoder.h"
 #include "VisionSystem.h"
+#include "UltrasonicRangefinder.h"
 
 // Used to transfer floats over the data bus
 typedef union {
@@ -11,6 +12,7 @@ typedef union {
 
 AbsoluteEncoder encoders(3, 4, 5); //data, clock, chip select
 VisionSystem visionSystem;
+UltrasonicRangefinder rangefinder; //see source for params
 
 // Used to calculate average velocity of each joint
 float valueBuffer[3][2];
@@ -47,11 +49,13 @@ void loop() {
   
   visionSystem.readBlocks();
 
+  rangefinder.readData();
+
   //delay(20);
 }
 
 void onRequestData() {
-  byte buff[16];
+  byte buff[18];
 
   uint32_t shoulderValue = encoders.getValue(0);
   buff[0] = shoulderValue >> 24;
@@ -79,7 +83,11 @@ void onRequestData() {
   buff[14] = targetWidth >> 8;
   buff[15] = targetWidth;
 
-  Wire.write(buff, 16);
+  int range = rangefinder.getRange();
+  buff[16] = range >> 8;
+  buff[17] = range;
+
+  Wire.write(buff, 18);
 
   packedFloat packedShoulderVel;
   packedShoulderVel.f = velocityBuffer[0];
